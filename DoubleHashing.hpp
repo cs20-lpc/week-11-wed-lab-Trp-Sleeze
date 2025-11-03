@@ -8,11 +8,19 @@ public:
         : HashTableClosed<T>(size) {}
 
     int hash2(const T& key) const {
-        return 7 - (static_cast<int>(key) % 7);
+        int k = static_cast<int>(key);
+        int x = k % 7;
+        int d = 7 - x;
+        if (d == 0) d = 1;
+        return d;
     }
 
     int probeIndex(const T& key, int i) const override {
-        // TODO: Implement double hashing
-        return 0;
+        int h = this->hash1(key);
+        int m = this->M;
+        int d = hash2(key);
+        long long add = 1LL * i * d;
+        int idx = (int)((h + add) % m);
+        return idx;
     }
- };
+};
